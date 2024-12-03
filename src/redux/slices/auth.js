@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 import request from '../../services/request'
 import { TOKEN, USER } from '../../utils/constants'
 const initialState = {
-	user: null,
+	user: JSON.parse(localStorage.getItem(USER)) || null,
 	isLoading: false,
 }
 
@@ -25,7 +25,14 @@ export const login = createAsyncThunk(
 const authSlice = createSlice({
 	initialState,
 	name: 'auth',
-	reducers: {},
+	reducers: {
+		logout(state, { payload: navigate }) {
+			state.user = null
+			localStorage.removeItem(USER)
+			Cookies.remove(TOKEN)
+			navigate('/')
+		},
+	},
 	extraReducers: builder => {
 		builder
 			.addCase(login.pending, state => {
@@ -41,7 +48,9 @@ const authSlice = createSlice({
 	},
 })
 
-const { reducer, name } = authSlice
+const { actions, reducer, name } = authSlice
+
+export const { logout } = actions
 
 export { name as authName }
 
