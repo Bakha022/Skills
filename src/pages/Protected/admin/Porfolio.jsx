@@ -1,49 +1,35 @@
-import { Space, Table, Tag } from 'antd'
+import { Button, Flex, Image, Modal, Table } from 'antd'
+import getImgUrl from '../../../utils/getImgUrl'
 const columns = [
+	{
+		title: 'Photo',
+		dataIndex: 'photo',
+		render: photo => <Image src={getImgUrl(photo)} />,
+	},
 	{
 		title: 'Name',
 		dataIndex: 'name',
-		key: 'name',
-		render: text => <a>{text}</a>,
-	},
-	{
-		title: 'Age',
-		dataIndex: 'age',
-		key: 'age',
-	},
-	{
-		title: 'Address',
-		dataIndex: 'address',
-		key: 'address',
-	},
-	{
-		title: 'Tags',
-		key: 'tags',
-		dataIndex: 'tags',
-		render: (_, { tags }) => (
-			<>
-				{tags.map(tag => {
-					let color = tag.length > 5 ? 'geekblue' : 'green'
-					if (tag === 'loser') {
-						color = 'volcano'
-					}
-					return (
-						<Tag color={color} key={tag}>
-							{tag.toUpperCase()}
-						</Tag>
-					)
-				})}
-			</>
+		render: (_, { name, url }) => (
+			<a target='_blank' href={url}>
+				{name}
+			</a>
 		),
 	},
 	{
-		title: 'Action',
-		key: 'action',
-		render: (_, record) => (
-			<Space size='middle'>
-				<a>Invite {record.name}</a>
-				<a>Delete</a>
-			</Space>
+		title: 'Description',
+		dataIndex: 'description',
+		key: 'description',
+	},
+	{
+		title: 'Actions',
+		dataIndex: 'actions',
+		render: (id, row) => (
+			<Flex gap={30}>
+				<Button onClick={() => editCategory(id, row)}>E</Button>
+				<Button danger onClick={() => openConfirmDeleteModal(id)}>
+					D
+				</Button>
+			</Flex>
 		),
 	},
 ]
@@ -72,7 +58,35 @@ const Porfolio = () => {
 			tags: ['cool', 'teacher'],
 		},
 	]
-	return <Table dataSource={data} columns={columns} />
+	return (
+		<>
+			<Table
+				title={() => (
+					<Flex align='center' justify='space-between'>
+						<h2>Portfolios {} </h2>
+					</Flex>
+				)}
+				// loading= {loading}
+				dataSource={data}
+				columns={columns}
+				// pagination={{
+				// 	total,
+				// 	page,
+				// 	pageSize: LIMIT,
+				// 	onchange: (page) => dispatch(changePage(page))
+				// 	}
+				// }
+			/>
+			<Modal
+				title='Portfolio data'
+				// open={isOpen}
+				// okText={selected == null ? "Add" : "Save"}
+				cancelText='Cencel'
+				// onCancel={()=> dispatch(controlModal())}
+				// onOk={onOk}
+			></Modal>
+		</>
+	)
 }
 
 export default Porfolio

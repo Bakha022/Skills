@@ -30,7 +30,7 @@ const authSlice = createSlice({
 			state.user = null
 			localStorage.removeItem(USER)
 			Cookies.remove(TOKEN)
-			navigate('/')
+			navigate('/login')
 		},
 	},
 	extraReducers: builder => {
